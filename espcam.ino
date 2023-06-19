@@ -78,14 +78,17 @@ void loop() {
   fmt2rgb888(fb->buf, fb->len, fb->format, rgb_buffer);
   //....
   uint8_t posLine = getPosLine(rgb_buffer);
-  Serial.println("Posicion X del centro: " + posLine);
+  Serial.println(posLine);
+
+  dt = millis()-lastTime;
+  // PID
+  int u = computePID(posline, dt);
 
   esp_camera_fb_return(fb);
   free(rgb_buffer);
   
   //TIEMPO DE MUESTREO O PROCESAMIENTO
-  dt = millis()-lastTime;
-  Serial.println(dt);
+  //Serial.println(dt);
   lastTime = millis();
 }
 
