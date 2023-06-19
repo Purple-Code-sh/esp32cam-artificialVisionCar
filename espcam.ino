@@ -74,9 +74,9 @@ void setup() {
 
   // RUEDA IZQUIERDA
   pinMode(IN2, OUTPUT);
-  digitalWrite(IN2, LOW);
+  digitalWrite(IN2, HIGH);
   pinMode(IN1, OUTPUT);
-  digitalWrite(IN1, HIGH);
+  digitalWrite(IN1, LOW);
   pinMode(ENA, OUTPUT);
   ledcSetup(pwm1, freq, res);
   ledcAttachPin(ENA, pwm1);
@@ -182,7 +182,7 @@ uint8_t getPosLine(uint8_t *imageIn){
   
   int mag = max_d - min_d;
 
-  if(mag>35){
+  if(mag>25){
     runner = true;
   } else {
     runner = false;
