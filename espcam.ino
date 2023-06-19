@@ -78,6 +78,7 @@ void loop() {
   fmt2rgb888(fb->buf, fb->len, fb->format, rgb_buffer);
   //....
   uint8_t posLine = getPosLine(rgb_buffer);
+  Serial.println("Posicion X del centro: " + posLine);
 
   esp_camera_fb_return(fb);
   free(rgb_buffer);
@@ -94,7 +95,7 @@ uint8_t getPosLine(uint8_t *imageIn){
   uint8_t greyArray[160];
   uint8_t greyColumn = 0;
 
-  for(size_t pixel=start; p<end; p+=3){
+  for(size_t p=start; p<end; p+=3){ //p means "pixel"
     uint8_t r = imageIn[p+2];
     uint8_t g = imageIn[p+1];
     uint8_t b = imageIn[p];
@@ -102,5 +103,30 @@ uint8_t getPosLine(uint8_t *imageIn){
     greyArray[greyColumn] = 0.3*r + 0.59*g + 0.11*b;
     greyColumn ++;
   }
-  return 0;
+
+  int diffArray[159];
+  int max_d = 0;
+  int min_d = 0;
+  uint8_t X1 = 0;
+  uint8_t X2 = 0;
+  uint8_t Xcentro = 0;
+
+  for(size_t p=0; p<159; p+=1){
+    int diff = greyArray[p+1] - greyArray[p];
+    diffArray[p] = diff;
+
+    if(max_d < diff){
+      max_d = diff;
+      X2 = p;
+    }
+    
+    if(diff < min_d){
+      min_d = diff;
+      X1  = p;
+    }
+  }
+
+  Xcentro = (X1+X2)/2;
+
+  return Xcentro;
 }
